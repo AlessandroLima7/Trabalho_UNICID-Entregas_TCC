@@ -1,0 +1,101 @@
+{% extends 'template.html' %}
+{% block conteudo %}
+
+<style>
+    #cabecalhosdiv {
+        border:1px solid black;
+        background-color: rgba(172, 171, 171, 0.549);
+      
+      }  
+      
+      #cabecalhosh {
+        padding: 8px;
+        text-align: center;
+      }
+      
+
+</style>
+
+<div class="row" >
+    <div class="mb-3" id="cabecalhosdiv">
+      <h3 id="cabecalhosh">CADASTRO DE GRUPO</h3>
+    </div>
+  </div>
+
+
+<form action="{{ url_for('cadastrar_grupo') }}" method="post" id="form">
+
+    <div class="row" >
+      <div class="form-group col-md-3 mb-3">
+        <label>NOME</label>
+        <input name="nome" type="text" class="form-control">
+      </div>
+      <div class="form-group col-md-3 mb-3">
+        <label>E-MAIL</label>
+        <input name="email" type="email" class="form-control">
+      </div> 
+      <div class="form-group col-md-2 mb-3">
+        <label>SENHA</label>
+        <input name="senha" type="text" class="form-control">
+      </div>
+      <div class="form-group col-md-2 mb-3">
+        <label>TURMA</label>
+        <input name="turma" type="text" class="form-control">
+      </div>
+      <input type="hidden" name="id_professor" value="{{ orientador }}">
+    </div> 
+
+    <div class="row">
+        <div class="form-group col-md-5 mb-3">
+
+        </div>
+        <div class="form-group col-md-5 mb-5 align-self-center ">
+            <input style="width: 300px;" type="submit" class="btn btn-primary" value="Salvar">
+        </div>
+        <div class="form-group col-md-2 mb-3">
+
+        </div>
+    </div>
+  </form>
+
+
+
+<table class="table table-striped table-responsive table-bordered">
+    <thead class="thead-default">
+        <tr>
+            <th>GRUPO</th>
+            <th>TURMA</th>
+            <th>E-MAIL</th>
+            <th>EXCLUIR</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for grupo in grupos %}
+        <tr>
+            <td>{{ grupo.nome }}</td>
+            <td>{{ grupo.turma}}</td>
+            <td>{{ grupo.email }}</td>
+            <td><a href="" onclick="executar('{{ grupo.nome }}')">Excluir</a></td> <!--TEM QUE IMPLANTAR NA VIEWS-->
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<script>
+  
+  function executar(nome) {
+    let resp = window.confirm(`Deseja excluir o usuário ?`)
+    if(resp){
+      window.location.href = `/excluir_grupo?nome=${nome}`
+    }
+    else {
+      window.alert('Exclusão cancelada.')
+    }
+  }
+
+
+
+
+</script>
+
+{% endblock %}

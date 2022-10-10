@@ -1,0 +1,38 @@
+{% extends 'template.html' %}
+{% block conteudo %}
+
+
+<table class="table table-striped table-responsive table-bordered">
+    <thead class="thead-default">
+        <tr>
+            <th>GRUPO</th>
+            <th>DOCUMENTO</th>
+            <th>ENTREGUE</th>
+            <th>ARQUIVO</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for grupo in grupos%}
+        {% for documento in documentos %}
+        {% if documento.grupo == grupo.nome %}
+        <tr>
+            <td>{{documento.grupo}}</td>
+            <td>{{documento.nome}}</td>
+            {% if documento.arquivo == None %}
+                <td>NÃO</td>
+                <td>SEM ARQUIVO</td>
+            {% else %}
+                <td>{{documento.data_hora}}</td>
+                <td><a href="{{ url_for('get_arquivo', nome_do_arquivo=documento.arquivo) }}" target="_blank">Baixar</a></td>
+            {% endif %}
+        </tr>
+        {% endif%}
+        {% endfor %}
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+{% endblock %}
