@@ -26,6 +26,7 @@ class Documentos(db.Model):
     grupo = db.Column(db.String(80), ForeignKey(Grupos.nome))
     data_hora = db.Column(db.Date, nullable=True)
     arquivo = db.Column(db.String(200), nullable=True)
+    avaliacao = db.Column(db.String(30), nullable=True)
     def __repr__(self):
         return '<Name %r>' % self.name
 

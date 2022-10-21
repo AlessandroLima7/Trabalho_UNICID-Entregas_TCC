@@ -7,8 +7,9 @@
         <tr>
             <th>GRUPO</th>
             <th>DOCUMENTO</th>
-            <th>ENTREGUE</th>
+            <th>ENTREGA</th>
             <th>ARQUIVO</th>
+            <th>AVALIAÇÃO</th>
         </tr>
     </thead>
     <tbody>
@@ -19,14 +20,72 @@
             <td>{{documento.grupo}}</td>
             <td>{{documento.nome}}</td>
             {% if documento.arquivo == None %}
-                <td>NÃO</td>
-                <td>SEM ARQUIVO</td>
+            {% if grupo_logado == 'sim' and documento.arquivo == None %}
+                <td>{{documento.data_hora}}</td>
+                <td>
+                <form class="form-group" action="{{ url_for('post_arquivo') }}" 
+                      method="POST" 
+                      enctype="multipart/form-data">
+                      <input type="text" hidden name="grupo" value="{{ grupo.nome }}">
+                      <input type="text" hidden name="id_documento" value="{{ documento.id_documento}}">
+                    <label class="form-label" for="meuArquivo">Upload Arquivo</label><br>
+                    <div class="row">
+                        <div class="form-group col-md-5 mb-3">
+                            <input class="form-control" type="file" id="meuArquivo" name="arquivo"><br>
+                        </div>
+                        <div class="form-group col-md-2 mb-3">
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </div>
+                        
+                    </div>
+                </form>
+                </td>
+                <td>{{documento.avaliacao}}</td>
+            {% else%}
+                <td>{{documento.data_hora}}</td>
+                <td>NÃO ENVIADO</td>
+                <td>{{documento.avaliacao}}</td>
+            {% endif %}
             {% else %}
+                {% if grupo_logado == 'sim' %}
+                    <td>{{documento.data_hora}}</td>
+                    <td>
+                        <a href="{{ url_for('get_arquivo', nome_do_arquivo=documento.arquivo) }}" target="_blank">Baixar </a> &ensp;
+                        {% if documento.avaliacao != 'APROVADO'%}
+                        <a href="{{ url_for('excluir_arquivo', id_documento=documento.id_documento)}}">Excluir</a>
+                        {% endif %}
+                    </td>
+                    <td>{{documento.avaliacao}}</td>
+                {% else %}
                 <td>{{documento.data_hora}}</td>
                 <td><a href="{{ url_for('get_arquivo', nome_do_arquivo=documento.arquivo) }}" target="_blank">Baixar</a></td>
+                <!--Atribuir nota-->
+                <td>
+                    <form class="form-group" action="{{ url_for('atribuir_nota') }}" 
+                      method="POST" 
+                      enctype="multipart/form-data">
+                      <input type="text" hidden name="id_documento" value="{{ documento.id_documento}}">
+                      <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                            <select class="form-select" name="avaliacao" id="">
+                                <option value="{{documento.avaliacao}}">{{documento.avaliacao}}</option>
+                                <option value="APROVADO">APROVADO</option>
+                                <option value="REPROVADO">REPROVADO</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group col-md-2 mb-3">
+                            <input class="btn btn-primary" type="submit" value="Confirmar">
+                        </div>
+
+                      </div>
+                      </form>
+                </td>
+                
+                {% endif %}
             {% endif %}
         </tr>
-        {% endif%}
+        {% endif %}
         {% endfor %}
         {% endfor %}
 
