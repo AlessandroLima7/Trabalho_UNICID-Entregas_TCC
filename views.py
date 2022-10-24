@@ -142,7 +142,7 @@ def cadastrar_entregas():
     if(session['usuario_logado'] == None):
         return redirect(url_for('login'))
     grupo = Grupos.query.filter_by(nome=request.form['grupo']).first()
-    documento = Documentos(nome=request.form['nome'], turma=grupo.turma, grupo=request.form['grupo'], data_hora=request.form['prazo'] )
+    documento = Documentos(nome=request.form['nome'], turma=grupo.turma, grupo=request.form['grupo'], data_hora=request.form['prazo'], avaliacao='PENDENTE')
     
     db.session.add(documento)
     db.session.commit()
